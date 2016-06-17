@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Test name="Sunshine Coast University Hospital - Load Test">
+  <Integration name="Nurse Call System" type="TAPInterface" active="true">
+    <Connection>
+      <Address>10.49.211.20</Address>
+      <Port>12000</Port>
+    </Connection>
+    <Messages name="Nurse Call Load-Test" type="TAPMessage" delay="0" repeat="30" active="true">
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027313</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027315</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027316</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027317</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027318</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027319</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027320</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027321</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027322</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>61752027323</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>5005</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+      <Message name="Patient Call" delay="0" repeat="1" active="true">
+        <CAPCode>7777</CAPCode>
+        <Body>Patient Call</Body>
+      </Message>
+    </Messages>
+    <Messages name="Nurse Call Smoke-Test" type="TAPMessage" delay="0" repeat="30" active="false"> 
+      <Message name="Staff Assist" delay="0" repeat="1" active="true">
+        <CAPCode>61752027315</CAPCode>
+        <Body>Message 2 - Staff Assist</Body>
+      </Message>
+      <Message name="Code Blue" delay="0" repeat="1" active="true">
+        <CAPCode>61752027316</CAPCode>
+        <Body>Message 3 - Medical Emergency</Body>
+      </Message>
+     <Message name="Patient Call" delay="0" repeat="1" active="true">
+       <CAPCode>61752027317</CAPCode>
+       <Body>Message 4 - Patient Call (#12345)</Body>
+     </Message>
+      <Message name="Cancel Code Blue" delay="0" repeat="1" active="true">
+        <CAPCode>61752027318</CAPCode>
+        <Body>Message 5 - Cancel Medical Emergency</Body>
+      </Message>
+    </Messages>
+  </Integration>
+  <Integration name="Security Management System" type="TAPInterface" active="false">
+    <Connection>
+      <Address>10.49.211.11</Address>
+      <Port>50004</Port>
+    </Connection>
+    <Messages name="SMS Smoke-Test" type="TAPMessage" delay="0" repeat="83" active="true">
+      <Message name="Duress (Fixed)" delay="0" repeat="1" active="true">
+        <CAPCode></CAPCode>
+        <Body>6/06/2016 4:24:01 AM +00:00 +00:00 | Fixed Duress | MHB-01ICU139-Consult Room 1-DUR</Body>
+      </Message>
+      <Message name="Duress (Fixed)" delay="0" repeat="1" active="true">
+        <CAPCode></CAPCode>
+        <Body>6/06/2016 4:24:01 AM +00:00 +00:00 | Fixed Duress | MHB-01EDU139-Consult Room 2-DUR</Body>
+      </Message>
+      <Message name="Duress (Fixed)" delay="0" repeat="1" active="true">
+        <CAPCode></CAPCode>
+        <Body>6/06/2016 4:24:01 AM +00:00 +00:00 | Fixed Duress | HUB-01SAR116-Meeting Room-DUR</Body>
+      </Message>
+      <Message name="Duress (Fixed)" delay="0" repeat="1" active="true">
+        <CAPCode></CAPCode>
+        <Body>6/06/2016 4:24:01 AM +00:00 +00:00 | Fixed Duress | HUB-01SAR116-Meeting Room-ABC</Body>
+      </Message>
+    </Messages>
+  </Integration>
+  <Integration name="Building Management System" type="SMTPInterface" active="false">
+    <Connection>
+      <Address>10.49.211.14</Address>
+      <Port>25</Port>
+    </Connection>
+    <Messages name="BMS Smoke-Test" type="SMTPMessage" delay="0" repeat="334" active="true">
+      <Message name="Fridge Alarm" delay="0" repeat="1" active="true">
+        <From>BMS@qh.qld.gov.au</From>
+        <To>test@10.49.211.14</To>
+        <Subject>Fridge Alarm</Subject>
+        <Body>Date Time: TriggeredTimestamp&#xD;Description: FRB-01PHA066 Alarm Text&#xD;Condition: AlarmState&#xD;Category: Category&#xD;Value: MonitoredValue&#xD;</Body>
+      </Message>
+    </Messages>
+  </Integration>
+  <Integration name="Fire Protection System" type="TCPIntegration" delay="0" repeat="1" active="false"> 
+    <Connection>
+      <Address>10.49.211.17</Address>
+      <Port>2222</Port>
+    </Connection>
+    <Messages name="FPS Smoke-Test" type="ConnectMessage" delay="150" repeat="300" active="true">
+      <Message name="Fire Alarm" delay="0" repeat="1" active="true">
+        <Body>|!F1* 1:16:02 pm THU 09-JUN-16 COMPUTER ROOM - AZF3 SMOKE DETECTOR ALARM_</Body>
+      </Message>
+    </Messages>
+  </Integration>
+  <Integration name="Pneumatic Tube System" type="SMTPInterface" active="false">
+    <Connection>
+      <Address>10.49.211.26</Address>
+      <Port>25</Port>
+    </Connection>
+    <Messages name="PTS Smoke-Test" type="SMTPMessage" delay="0" repeat="166" active="true">
+      <Message name="Carrier Arrived" delay="0" repeat="1" active="true">
+        <From>PTS@qh.qld.gov.au</From>
+        <To>messaging@qh.qld.gov.au</To>
+        <Subject>PAT - Carrier Arrived</Subject>
+        <Body>Carrier 1 successfully sent from EMERGENCY RESUS - MULTISEND (L0) to PATHOLOGY MAIN BENCH - RECEIVE ONLY (L5)</Body>
+      </Message>
+      <Message name="PAT - Carrier Arrived" delay="0" repeat="1" active="true">
+        <From>PTS@qh.qld.gov.au</From>
+        <To>messaging@qh.qld.gov.au</To>
+        <Subject>Carrier Arrived</Subject>
+        <Body>Carrier 2 successfully sent from PATHOLOGY MAIN BENCH - MULTISEND (L5) to MHU ADOLESCENT / OLDER PERSON (L0)</Body>
+      </Message>
+    </Messages>
+  </Integration>
+</Test>
