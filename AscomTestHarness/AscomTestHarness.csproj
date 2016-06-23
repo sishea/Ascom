@@ -87,7 +87,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\NurseCall_heartbeat.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Data\IntegrationTest.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Data\PTS_FPS_test.xml">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
