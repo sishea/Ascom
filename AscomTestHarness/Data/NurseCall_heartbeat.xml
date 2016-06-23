@@ -5,8 +5,9 @@
       <Address>10.49.211.20</Address>
       <Port>12000</Port>
     </Connection>
-    <Messages name="Nurse Call Heartbeat" type="TAPMessage" delay="30" repeat="6" active="true">
-      <Message name="Heartbeat" delay="0" repeat="1" active="true">
+    <Messages name="Nurse Call Heartbeat" type="TAPMessage" delay="0" repeat="1" active="true">
+      <!--Send Heartbeat for 3 minutes then stop-->
+      <Message name="Heartbeat" delay="30" repeat="6" active="true">
         <CAPCode></CAPCode>
         <Body>NURSE CALL ONLINE</Body>
       </Message>
