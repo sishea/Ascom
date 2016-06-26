@@ -7,11 +7,11 @@
     </Connection>
     <Messages name="Nurse Call" type="TAPMessage" delay="0" repeat="10" active="false">
       <Message name="Code Blue" delay="0" repeat="1" active="true">
-        <CAPCode>Group #1</CAPCode>
+        <CAPCode>601000</CAPCode>
         <Body>LVL 4 4A BED 4 Emergency</Body>
       </Message>
       <Message name="Code Blue" delay="0" repeat="1" active="true">
-        <CAPCode>Group #2</CAPCode>
+        <CAPCode>601001</CAPCode>
         <Body>LVL 5 5A BED 5 Emergency</Body>
       </Message>
     </Messages>
