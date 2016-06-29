@@ -17,7 +17,7 @@ namespace AscomTestHarness
     public class TestHarness
     {
         private static readonly TestHarness _instance = new TestHarness();
-        private Queue<ConnectInterface> _integrations = new Queue<ConnectInterface>();
+        private Queue<ConnectInterface> _integrations;
         private DebugLevel _debugLevel;
 
         private string _name;
@@ -42,6 +42,8 @@ namespace AscomTestHarness
 
         public void LoadXml(string fileName)
         {
+            _integrations = new Queue<ConnectInterface>();
+
             XDocument doc = XDocument.Load(XmlReader.Create(fileName));
             XElement root = doc.Element("Test");
             _name = root.Attribute("name").Value;
