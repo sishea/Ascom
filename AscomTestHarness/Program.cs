@@ -15,39 +15,40 @@ namespace AscomTestHarness
     
     class Program
     {         
-        private const string LOGFILE = @"C:\Users\sshea5\Documents\Visual Studio 2015\Projects\AscomTestHarness\AscomTestHarness\Data\IntegrationTestLog.txt";
+        private const string LOGFILE = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\TestLog.txt";
 
         static void Main(string[] args)
         { 
             string filePath;
-            // *** UPDATE ME! ***
-            TestScript script = TestScript.SMS;
+            // ********** UPDATE ME! **********
+            TestScript script = TestScript.PTS;
+            // ********************************
 
-            switch(script)
+            switch (script)
             {
                 //PTS Test
                 case TestScript.PTS:
-                    filePath = @"C:\Users\sshea5\Documents\CSC\AscomTestHarness\Data\PTSTest.xml";
+                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\PTSTest.xml";
                     break;
                 //FPS Test
                 case TestScript.FPS:
-                    filePath = @"C:\Users\sshea5\Documents\CSC\AscomTestHarness\Data\FPSTest.xml";
+                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\FPSTest.xml";
                     break;
                 //Nurse Call Test
                 case TestScript.NurseCall:
-                    filePath = @"C:\Users\sshea5\Documents\CSC\AscomTestHarness\Data\NurseCallTest.xml";
+                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\NurseCallTest.xml";
                     break;
                 //BMS Test
                 case TestScript.BMS:
-                    filePath = @"C:\Users\sshea5\Documents\CSC\AscomTestHarness\Data\BMSTest.xml";
+                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\BMSTest.xml";
                     break;
                 //SMS Test
                 case TestScript.SMS:
-                    filePath = @"C:\Users\sshea5\Documents\CSC\AscomTestHarness\Data\SMSTest.xml";
+                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\SMSTest.xml";
                     break;
                 //Integreation Test
                 default:
-                    filePath = @"C:\Users\sshea5\Documents\Visual Studio 2015\Projects\AscomTestHarness\AscomTestHarness\Data\IntegrationTest.xml";
+                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\IntegrationTest.xml";
                     break;
             }
 
