@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using System.Diagnostics;
 
 namespace AscomIntegration
 {
@@ -24,6 +25,8 @@ namespace AscomIntegration
             _email = new MailMessage(from, to);
             _email.Body = message.ToString();
             _email.Subject = ((SMTPMessage)message).Subject;
+            Debug.WriteLineIf(_debugLevel == DebugLevel.High, "Sending email with subject: " + _email.Subject);
+            _numMessages++;
             SendData(message.ToString());
             Close();
         }
@@ -43,14 +46,17 @@ namespace AscomIntegration
                 // Send the message to the connected TcpServer. 
                 _client.Send(_email);
                 _email.Dispose();
+                _numSends++;
             }
             catch (ArgumentNullException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.ToString(), "ArgumentNullException");
+                _numFails++;
             }
             catch (SmtpException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.ToString(), "SmtpException");
+                _numFails++;
             }
         }
     }
