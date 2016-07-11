@@ -15,7 +15,7 @@ namespace AscomTestHarness
     
     class Program
     {         
-        private const string LOGFILE = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\TestLog.txt";
+        private const string LOGFILE = @"Data\TestLog.txt";
 
         static void Main(string[] args)
         { 
@@ -28,27 +28,27 @@ namespace AscomTestHarness
             {
                 //PTS Test
                 case TestScript.PTS:
-                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\PTSTest.xml";
+                    filePath = @"Data\PTSTest.xml";
                     break;
                 //FPS Test
                 case TestScript.FPS:
-                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\FPSTest.xml";
+                    filePath = @"Data\FPSTest.xml";
                     break;
                 //Nurse Call Test
                 case TestScript.NurseCall:
-                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\NurseCallTest.xml";
+                    filePath = @"Data\NurseCallTest.xml";
                     break;
                 //BMS Test
                 case TestScript.BMS:
-                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\BMSTest.xml";
+                    filePath = @"Data\BMSTest.xml";
                     break;
                 //SMS Test
                 case TestScript.SMS:
-                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\SMSTest.xml";
+                    filePath = @"Data\SMSTest.xml";
                     break;
-                //Integreation Test
+                //Integration Test
                 default:
-                    filePath = @"C:\Users\sshea5\Documents\Customers\SCUH\TestHarness\Data\IntegrationTest.xml";
+                    filePath = @"Data\IntegrationTest.xml";
                     break;
             }
 

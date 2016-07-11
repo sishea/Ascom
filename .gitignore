@@ -7,6 +7,12 @@
 *.userosscache
 *.sln.docstates
 
+# gvim backup files
+*~
+
+# Data dir (don't check into public repository)
+Data/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace AscomIntegration
 {
@@ -44,6 +45,8 @@ namespace AscomIntegration
         public override void Send(ConnectMessage message)
         {
             Connect();
+            Debug.WriteLineIf(_debugLevel == DebugLevel.High, "Sending TAP message with body: " + message.Body);
+            _numMessages++;
             SendData(CR.ToString());
             SendData(_pagerID);
             SendData(message.ToString());
@@ -60,7 +63,7 @@ namespace AscomIntegration
 
                 // Send the message to the connected TcpServer. 
                 _stream.Write(data, 0, data.Length);
-
+                
                 // Receive the TcpServer.response.
                 // Buffer to store the response bytes.
                 data = new Byte[256];
@@ -68,14 +71,19 @@ namespace AscomIntegration
                 // Read the first batch of the TcpServer response bytes.
                 Int32 bytes = _stream.Read(data, 0, data.Length);
                 string responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+
+                //TODO: interpret response data to check if it really worked.
+                _numSends++;
             }
             catch (ArgumentNullException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.ToString(), "ArgumentNullException");
+                _numFails++;
             }
             catch (SocketException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.ToString(), "SocketException");
+                _numFails++;
             }
         }
 

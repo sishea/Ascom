@@ -8,13 +8,19 @@ using System.Net.Sockets;
 using System.Xml.Linq;
 using System.Diagnostics;
 
+
 namespace AscomIntegration
 {
+    public enum DebugLevel { High, Normal, None };
+
     public abstract class ConnectInterface : ConnectObject
     {
         protected string _address;
         protected int _port;
-
+        protected DebugLevel _debugLevel;
+        protected int _numMessages;
+        protected int _numSends;
+        protected int _numFails;
 
         protected Queue<ConnectMessage> _messages = new Queue<ConnectMessage>();
 
@@ -28,12 +34,43 @@ namespace AscomIntegration
             XElement element = XElement.Parse(xml);
             _address = element.Element("Address").Value;
             _port = Int32.Parse(element.Element("Port").Value);
+            ResetStatistics();
         }
 
         public abstract void Send(ConnectMessage message);
         protected abstract void Connect();
         protected abstract void Close();
         protected abstract void SendData(string message);
+
+        public void SetDebugLevel(DebugLevel lvl)
+        {
+            _debugLevel = lvl;
+        }
+
+        public void ResetStatistics()
+        {
+            _numMessages = 0;
+            _numSends = 0;
+            _numFails = 0;
+        }
+
+        public void ReportStatistics()
+        {
+            StringBuilder str = new StringBuilder();
+            str.Append(this.GetType().ToString());
+            str.Append(" Messages to: ");
+            str.Append(_address);
+            str.Append(":");
+            str.Append(_port);
+            str.Append(" Num messages: ");
+            str.Append(_numMessages);
+            str.Append(" Sends OK: ");
+            str.Append(_numSends);
+            str.Append(" Errors: ");
+            str.Append(_numFails);
+            Debug.WriteLine(str.ToString());
+            ResetStatistics();
+        }
 
         public string Address
         {
@@ -84,6 +121,7 @@ namespace AscomIntegration
             str.Append(" Ended at: ");
             str.Append(DateTime.Now.ToString());
             Debug.WriteLine(str.ToString());
+            ReportStatistics();
         }
     }
 }
