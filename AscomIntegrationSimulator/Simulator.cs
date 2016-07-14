@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -17,7 +18,7 @@ namespace AscomIntegrationSimulator
     {
         private TestHarness _harness = TestHarness.Instance;
 
-        private Timer _timer;
+        private System.Threading.Timer _timer;
         private DateTime _started;
 
         public Simulator()
@@ -27,12 +28,7 @@ namespace AscomIntegrationSimulator
             _txtScript.Text = Properties.Settings.Default.FilePath;
             _txtLog.Text = Properties.Settings.Default.LogPath;
             _cmbLogLevel.DataSource = Enum.GetValues(typeof(DebugLevel));
-
-            _timer = new Timer();
-            _timer.Interval = 1000;
-            _timer.Tick += new EventHandler(UpdateTimer);
-            _timer.Stop();
-
+            
             _harness.PropertyChanged += HarnessPropertyChanged;
         }
 
@@ -44,11 +40,12 @@ namespace AscomIntegrationSimulator
                 {
                     _btnRun.Enabled = false;
                     _started = DateTime.Now;
-                    _timer.Start();
+                    _timer = new System.Threading.Timer(new TimerCallback(UpdateTimer));
+                    _timer.Change(1000, 1000);
                 }
                 else
                 {
-                    _timer.Stop();
+                    _timer.Dispose();
                     _txtTime.Text = DateTime.Now.Subtract(_started).ToString(@"hh\:mm\:ss\.ff");
                     _btnRun.Enabled = true;
                 }
@@ -57,7 +54,7 @@ namespace AscomIntegrationSimulator
             }
         }
 
-        private void UpdateTimer(object sender, EventArgs e)
+        private void UpdateTimer(object sender)
         {
             _txtTime.Text = DateTime.Now.Subtract(_started).ToString(@"hh\:mm\:ss");
             _txtTime.Invalidate();

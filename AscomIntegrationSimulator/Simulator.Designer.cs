@@ -151,6 +151,7 @@
             // 
             // _cmbLogLevel
             // 
+            this._cmbLogLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this._cmbLogLevel.FormattingEnabled = true;
             this._cmbLogLevel.Location = new System.Drawing.Point(176, 141);
             this._cmbLogLevel.Name = "_cmbLogLevel";
