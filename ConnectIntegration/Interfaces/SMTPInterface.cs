@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace AscomIntegration
 {
-    public class SMTPInterface : ConnectInterface
+    public class SMTPInterface : ConnectInterface, IDisposable
     {
         private SmtpClient _client;
         private MailMessage _email;
@@ -58,6 +58,12 @@ namespace AscomIntegration
                 System.Diagnostics.Debug.WriteLine(e.ToString(), "SmtpException");
                 _numFails++;
             }
+        }
+
+        public void Dispose()
+        {
+            _email.Dispose();
+            _client.Dispose();
         }
     }
 }

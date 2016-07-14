@@ -9,16 +9,20 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 using AscomIntegration;
+using System.ComponentModel;
 
 namespace AscomTestHarness
 {
     public enum DebugLevel { High, Normal, None };
     
-    public class TestHarness
+    public class TestHarness : INotifyPropertyChanged
     {
         private static readonly TestHarness _instance = new TestHarness();
         private Queue<ConnectInterface> _integrations;
         private DebugLevel _debugLevel;
+        private static bool _running = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private string _name;
 
@@ -30,6 +34,22 @@ namespace AscomTestHarness
         {
             get { return _instance; }
         }
+
+        public bool Running
+        {
+            get { return _running; }
+
+            private set
+            {
+                if (_running != value)
+                {
+                    _running = value;
+                    OnPropertyChanged("Running");
+                }
+            }
+        }
+
+        public object LogLevel { get; set; }
 
         public void SetupLog(DebugLevel lvl, string logFile)
         {
@@ -112,7 +132,9 @@ namespace AscomTestHarness
             str.Append(DateTime.Now.ToString());
             Debug.WriteLine(str.ToString());
 
+            Running = true;
             Parallel.ForEach(_integrations, integration => integration.SendAllMessages());
+            Running = false;
 
             str.Clear();
             str.Append(_name);
@@ -120,6 +142,17 @@ namespace AscomTestHarness
             str.Append(DateTime.Now.ToString());
             Debug.WriteLine(str.ToString());
             Debug.Flush();
+        }
+
+        // Create the OnPropertyChanged method to raise the event
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }
