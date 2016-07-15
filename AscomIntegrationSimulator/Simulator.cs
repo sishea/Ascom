@@ -16,6 +16,9 @@ namespace AscomIntegrationSimulator
 {
     public partial class Simulator : Form
     {
+        delegate void SetTextCallback(string text);
+        private BackgroundWorker _updateThread;
+
         private TestHarness _harness = TestHarness.Instance;
 
         private System.Threading.Timer _timer;
@@ -40,7 +43,7 @@ namespace AscomIntegrationSimulator
                 {
                     _btnRun.Enabled = false;
                     _started = DateTime.Now;
-                    _timer = new System.Threading.Timer(new TimerCallback(UpdateTimer));
+                    //_timer = new System.Threading.Timer(new TimerCallback(SetText));
                     _timer.Change(1000, 1000);
                 }
                 else
@@ -54,13 +57,25 @@ namespace AscomIntegrationSimulator
             }
         }
 
-        private void UpdateTimer(object sender)
+        //private void UpdateTimer(object sender)
+        //{
+        //    if (InvokeRequired)
+        //    {
+        //        BeginInvoke(new Action(() => _txtTime.Text = DateTime.Now.Subtract(_started).ToString(@"hh\:mm\:ss")), null);
+        //    }
+        //}
+
+        private void SetText(string text)
         {
-            _txtTime.Text = DateTime.Now.Subtract(_started).ToString(@"hh\:mm\:ss");
-            _txtTime.Invalidate();
-            _txtTime.Update();
-            _txtTime.Refresh();
-            Application.DoEvents();
+            if (_txtTime.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                Invoke(d, new object[] { text });
+            }
+            else
+            {
+                _txtTime.Text = text;
+            }
         }
 
         private void ScriptClick(object sender, EventArgs e)

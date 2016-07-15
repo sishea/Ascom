@@ -15,6 +15,8 @@ namespace AscomIntegration
 
     public abstract class ConnectInterface : ConnectObject
     {
+        private const int NUM_ATTEMPTS = 10;
+
         protected string _address;
         protected int _port;
         protected DebugLevel _debugLevel;
@@ -102,14 +104,45 @@ namespace AscomIntegration
             str.Append(DateTime.Now.ToString());
             Debug.WriteLine(str.ToString());
 
+            int attempts = 0;
+
             for (int repeat = 0; repeat < Repeat; repeat++)
             {
                 foreach (ConnectMessage message in _messages)
                 {
                     for (int msgRepeat = 0; msgRepeat < message.Repeat; msgRepeat++)
                     {
-                        Send(message);
-                        Thread.Sleep(message.Delay);
+                        try
+                        {
+                            Send(message);
+                            Thread.Sleep(message.Delay);
+                        }
+                        catch (Exception ex)
+                        {
+                            // log and wait 1 sec to retry
+                            StringBuilder sb = new StringBuilder();
+                            sb.Append("Message Send Failed (");
+                            sb.Append(DateTime.Now.ToString("B"));
+                            sb.Append(": ");
+                            sb.Append(ex.Message);
+
+                            Debug.WriteLine(sb.ToString());
+                            Thread.Sleep(1000);
+
+                            if (attempts < NUM_ATTEMPTS)
+                            {
+                                msgRepeat--;
+                            }
+                            else
+                            {
+                                sb = new StringBuilder();
+                                sb.Append(NUM_ATTEMPTS);
+                                sb.Append(" attempts to resend failed.");
+                                Debug.WriteLine(sb.ToString());
+
+                                throw new Exception(sb.ToString(), ex);
+                            }
+                        }
                     }
                 }
 

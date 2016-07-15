@@ -19,7 +19,8 @@ namespace AscomIntegration
 
         public override void Send(ConnectMessage message)
         {
-            Connect();
+            if (_client == null) Connect();
+
             MailAddress from = new MailAddress(((SMTPMessage)message).To);
             MailAddress to = new MailAddress(((SMTPMessage)message).From);
             _email = new MailMessage(from, to);
