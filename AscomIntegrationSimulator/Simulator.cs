@@ -44,11 +44,11 @@ namespace AscomIntegrationSimulator
                     _btnRun.Enabled = false;
                     _started = DateTime.Now;
                     //_timer = new System.Threading.Timer(new TimerCallback(SetText));
-                    _timer.Change(1000, 1000);
+                    //_timer.Change(1000, 1000);
                 }
                 else
                 {
-                    _timer.Dispose();
+                    //_timer.Dispose();
                     _txtTime.Text = DateTime.Now.Subtract(_started).ToString(@"hh\:mm\:ss\.ff");
                     _btnRun.Enabled = true;
                 }

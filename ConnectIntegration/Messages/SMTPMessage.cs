@@ -34,15 +34,5 @@ namespace AscomIntegration
         {
             get { return _subject; }
         }
-
-        public string Body
-        {
-            get { return _body; }
-        }
-
-        public override string ToString()
-        {
-            return _body;
-        }
     }
 }

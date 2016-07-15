@@ -19,7 +19,7 @@ namespace AscomIntegration
 
         public override string ToString()
         {
-            return TAPInterface.TAPString(_address, _body);
+            return TAPInterface.TAPString(_address, base.ToString());
         }
     }
 }

@@ -111,6 +111,7 @@ namespace AscomTestHarness
                                     msg.Name = messages.Attribute("name").Value;
                                     msg.Delay = Convert.ToInt32(message.Attribute("delay").Value);
                                     msg.Repeat = Convert.ToInt32(message.Attribute("repeat").Value);
+                                    msg.ToString();
                                     integration.EnqueueMessage(msg);
 
                                     Debug.WriteLineIf(_debugLevel == DebugLevel.High, msg.ToString(), "Loaded");

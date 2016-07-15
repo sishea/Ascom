@@ -15,7 +15,7 @@ namespace AscomIntegration
 
     public abstract class ConnectInterface : ConnectObject
     {
-        private const int NUM_ATTEMPTS = 10;
+        private const int NUM_ATTEMPTS = 36;
 
         protected string _address;
         protected int _port;
@@ -104,6 +104,7 @@ namespace AscomIntegration
             str.Append(DateTime.Now.ToString());
             Debug.WriteLine(str.ToString());
 
+            int number = 0;
             int attempts = 0;
 
             for (int repeat = 0; repeat < Repeat; repeat++)
@@ -112,6 +113,8 @@ namespace AscomIntegration
                 {
                     for (int msgRepeat = 0; msgRepeat < message.Repeat; msgRepeat++)
                     {
+                        message.Number = ++number;
+
                         try
                         {
                             Send(message);
@@ -122,19 +125,22 @@ namespace AscomIntegration
                             // log and wait 1 sec to retry
                             StringBuilder sb = new StringBuilder();
                             sb.Append("Message Send Failed (");
-                            sb.Append(DateTime.Now.ToString("B"));
+                            sb.Append(DateTime.Now.ToString("HH:mm:ss"));
                             sb.Append(": ");
                             sb.Append(ex.Message);
 
                             Debug.WriteLine(sb.ToString());
-                            Thread.Sleep(1000);
+                            Thread.Sleep(5000);
 
                             if (attempts < NUM_ATTEMPTS)
                             {
+                                // roll back increments
                                 msgRepeat--;
+                                number--;
                             }
                             else
                             {
+                                // log the error and throw an exception
                                 sb = new StringBuilder();
                                 sb.Append(NUM_ATTEMPTS);
                                 sb.Append(" attempts to resend failed.");
