@@ -25,7 +25,6 @@ namespace AscomIntegration
         public string Body
         {
             get { return _body; }
-            //set { _body = value; }
         }
 
         internal int Index

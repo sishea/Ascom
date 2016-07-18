@@ -27,7 +27,7 @@ namespace AscomIntegration
             _email = new MailMessage(from, to);
             _email.Body = message.ToString();
             _email.Subject = ((SMTPMessage)message).Subject;
-            Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - Sending email with subject: " + _email.Subject);
+            //Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - Sending email with subject: " + _email.Subject);
             _numMessages++;
             SendData(message.ToString());
             Close();

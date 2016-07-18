@@ -116,12 +116,13 @@ namespace AscomIntegration
                         try
                         {
                             message.Index = ++number;
+                            Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - [" + this.GetType().ToString() + "] Sending message: " + message.ToString());
                             Send(message);
                             Thread.Sleep(message.Delay);
                         }
                         catch (Exception ex)
                         {
-                            // log and wait 1 sec to retry
+                            // log and wait 5secs to retry
                             StringBuilder sb = new StringBuilder();
                             sb.Append("Message Send Failed (");
                             sb.Append(DateTime.Now.ToString("HH:mm:ss"));
