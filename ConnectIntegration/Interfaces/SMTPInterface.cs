@@ -19,14 +19,15 @@ namespace AscomIntegration
 
         public override void Send(ConnectMessage message)
         {
-            if (_client == null) Connect();
+            //if (_client == null)
+                Connect();
 
             MailAddress from = new MailAddress(((SMTPMessage)message).To);
             MailAddress to = new MailAddress(((SMTPMessage)message).From);
             _email = new MailMessage(from, to);
             _email.Body = message.ToString();
             _email.Subject = ((SMTPMessage)message).Subject;
-            Debug.WriteLineIf(_debugLevel == DebugLevel.High, "Sending email with subject: " + _email.Subject);
+            Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - Sending email with subject: " + _email.Subject);
             _numMessages++;
             SendData(message.ToString());
             Close();
@@ -37,7 +38,11 @@ namespace AscomIntegration
             _client = new SmtpClient(_address, _port);
         }
 
-        protected override void Close() { } // no smtp close
+        protected override void Close()
+        {
+            _email.Dispose();
+            _client.Dispose();
+        } // no smtp close
 
 
         protected override void SendData(string message)

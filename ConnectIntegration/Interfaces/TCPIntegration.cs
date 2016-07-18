@@ -21,7 +21,7 @@ namespace AscomIntegration
         public override void Send(ConnectMessage message)
         {
             Connect();
-            Debug.WriteLineIf(_debugLevel == DebugLevel.High, "Sending TCP message with body: " + message.Body);
+            Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - Sending TCP message with body: " + message.Body);
             _numMessages++;
             SendData(message.ToString());
             Close();

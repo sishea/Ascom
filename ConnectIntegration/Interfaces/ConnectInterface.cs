@@ -113,10 +113,9 @@ namespace AscomIntegration
                 {
                     for (int msgRepeat = 0; msgRepeat < message.Repeat; msgRepeat++)
                     {
-                        message.Number = ++number;
-
                         try
                         {
+                            message.Index = ++number;
                             Send(message);
                             Thread.Sleep(message.Delay);
                         }
