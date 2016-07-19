@@ -42,7 +42,6 @@ namespace AscomIntegration
         public abstract void Send(ConnectMessage message);
         protected abstract void Connect();
         protected abstract void Close();
-        protected abstract void SendData(string message);
 
         public void SetDebugLevel(DebugLevel lvl)
         {

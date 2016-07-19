@@ -54,7 +54,7 @@ namespace AscomIntegration
             Close();
         }
 
-        protected override void SendData(string msg)
+        private void SendData(string msg)
         {
             try
             {
