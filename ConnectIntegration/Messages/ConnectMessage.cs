@@ -34,10 +34,11 @@ namespace AscomIntegration
 
         public override string ToString()
         {
-            string str = _body.Replace(NUMBER_PLACEHOLDER, _index.ToString());
-            str = str.Replace(TIME_PLACEHOLDER, DateTime.Now.ToString("HH:mm:ss"));
+            StringBuilder str = new StringBuilder(_body);
+            str.Replace(NUMBER_PLACEHOLDER, _index.ToString());
+            str.Replace(TIME_PLACEHOLDER, DateTime.Now.ToString("HH:mm:ss"));
 
-            return str;
+            return str.ToString();
         }
     }
 }
