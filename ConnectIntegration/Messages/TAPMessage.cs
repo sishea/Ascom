@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace AscomIntegration
 {
     public class TAPMessage : ConnectMessage
     {
-        protected string _address;
+        protected string _capCode;
 
-        public TAPMessage(string xml) : base(xml)
+        public TAPMessage(TAPInterface conn, string collectionName, XElement element) : base(conn, collectionName, element)
         {
-            XElement element = XElement.Parse(xml);
-            _address = element.Element("CAPCode").Value;
+            _capCode = element.Element("CAPCode").Value;
         }
 
-        public override string ToString()
+        public override void SendData()
         {
-            return TAPInterface.TAPString(_address, base.ToString());
+            ((TAPInterface)_interface).SendMessage(TAPInterface.TAPString(_capCode, _body));
         }
     }
 }

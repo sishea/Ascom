@@ -1,38 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
 using System.Xml.Linq;
 
 namespace AscomIntegration
 {
     public class SMTPMessage : ConnectMessage
     {
-        protected string _to;
-        protected string _from;
-        protected string _subject;
+        private MailMessage _email;
 
-        public SMTPMessage(string xml) : base(xml)
+        public SMTPMessage(SMTPInterface conn, string collectionName, XElement element) : base(conn, collectionName, element)
         {
-            XElement element = XElement.Parse(xml);
-            _to = element.Element("To").Value;
-            _from = element.Element("From").Value;
-            _subject = element.Element("Subject").Value;
+            _email = new MailMessage(element.Element("From").Value, element.Element("To").Value);
+            _email.Subject = element.Element("Subject").Value;
+            _email.Body = _body;
         }
 
-        public string To
+        public override void SendData()
         {
-            get { return _to; }
-        }
-        public string From
-        {
-            get { return _from; }
-        }
-
-        public string Subject
-        {
-            get { return _subject; }
+                ((SMTPInterface)_interface).SendEmail(_email);
         }
     }
 }

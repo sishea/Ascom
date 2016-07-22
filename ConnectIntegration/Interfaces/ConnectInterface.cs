@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Net.Sockets;
 using System.Xml.Linq;
-using System.Diagnostics;
 
 
 namespace AscomIntegration
 {
     public enum DebugLevel { High, Normal, None };
 
-    public abstract class ConnectInterface : ConnectObject
+    public abstract class ConnectInterface
     {
         private const int NUM_ATTEMPTS = 36;
+        private const string NUMBER_PLACEHOLDER = "||number||";
+        private const string TIME_PLACEHOLDER = "||time||";
 
+        private XElement _element;
+        private string _name;
         protected string _address;
         protected int _port;
         protected DebugLevel _debugLevel;
@@ -24,24 +24,26 @@ namespace AscomIntegration
         protected int _numSends;
         protected int _numFails;
 
-        protected Queue<ConnectMessage> _messages = new Queue<ConnectMessage>();
+        //protected Queue<ConnectMessage> _messages = new Queue<ConnectMessage>();
 
-        protected ConnectInterface(string xml)
+        protected ConnectInterface(XElement element)
         {
-            LoadXml(xml);
-        }
+            _element = element;
+            _name = _element.Attribute("name").Value;
+            SetupConnection(_element.Element("Connection"));
 
-        private void LoadXml(string xml)
-        {
-            XElement element = XElement.Parse(xml);
-            _address = element.Element("Address").Value;
-            _port = Int32.Parse(element.Element("Port").Value);
             ResetStatistics();
         }
 
-        public abstract void Send(ConnectMessage message);
-        protected abstract void Connect();
-        protected abstract void Close();
+        private void SetupConnection(XElement paramXML)
+        {
+            _address = paramXML.Element("Address").Value;
+            _port = Int32.Parse(paramXML.Element("Port").Value);
+        }
+
+        //public abstract void Send(ConnectMessage message);
+        //protected abstract void Connect();
+        //protected abstract void Close();
 
         public void SetDebugLevel(DebugLevel lvl)
         {
@@ -85,81 +87,60 @@ namespace AscomIntegration
             set { _port = value; }
         }
 
-        public Queue<ConnectMessage> Messages
+        public void SendMessages()
         {
-            get { return _messages; }
-        }
+            //int uid = 0;
 
-        public void EnqueueMessage(ConnectMessage msg)
-        {
-            _messages.Enqueue(msg);
-        }
+            Debug.Indent();
 
-        public void SendAllMessages()
-        {
-            StringBuilder str = new StringBuilder();
-            str.Append(this.GetType().ToString());
-            str.Append(" Started at: ");
-            str.Append(DateTime.Now.ToString());
-            Debug.WriteLine(str.ToString());
-
-            int number = 0;
-            int attempts = 0;
-
-            for (int repeat = 0; repeat < Repeat; repeat++)
+            // each message collection
+            foreach (XElement messages in _element.Elements("Messages"))
             {
-                foreach (ConnectMessage message in _messages)
+                // only active message collections
+                if (Convert.ToBoolean(messages.Attribute("active").Value))
                 {
-                    for (int msgRepeat = 0; msgRepeat < message.Repeat; msgRepeat++)
+                    StringBuilder messageType = new StringBuilder("AscomIntegration.");
+                    messageType.Append(messages.Attribute("type").Value);
+                    messageType.Append(", AscomIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
+                    Type msgType = Type.GetType(messageType.ToString());
+                    string collectionName = messages.Attribute("name").Value;
+
+                    Debug.Indent();
+
+                    int id = 0;
+
+                    // message collection repeats
+                    for (int colRpt = 0; colRpt < Int32.Parse(messages.Attribute("repeat").Value); colRpt++)
                     {
-                        try
+                        // each message in this collection
+                        foreach (XElement message in messages.Elements("Message"))
                         {
-                            message.Index = ++number;
-                            Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - [" + this.GetType().ToString() + "] Sending message: " + message.ToString());
-                            Send(message);
-                            Thread.Sleep(message.Delay);
-                        }
-                        catch (Exception ex)
-                        {
-                            // log and wait 5secs to retry
-                            StringBuilder sb = new StringBuilder();
-                            sb.Append("Message Send Failed (");
-                            sb.Append(DateTime.Now.ToString("HH:mm:ss"));
-                            sb.Append(": ");
-                            sb.Append(ex.Message);
-
-                            Debug.WriteLine(sb.ToString());
-                            Thread.Sleep(5000);
-
-                            if (attempts < NUM_ATTEMPTS)
+                            // only active messages
+                            if (Convert.ToBoolean(message.Attribute("active").Value))
                             {
-                                // roll back increments
-                                msgRepeat--;
-                                number--;
-                            }
-                            else
-                            {
-                                // log the error and throw an exception
-                                sb = new StringBuilder();
-                                sb.Append(NUM_ATTEMPTS);
-                                sb.Append(" attempts to resend failed.");
-                                Debug.WriteLine(sb.ToString());
+                                // message repeats
+                                for (int msgRpt = 0; msgRpt < Int32.Parse(message.Attribute("repeat").Value); msgRpt++)
+                                {
+                                    // parse placeholders
+                                    StringBuilder str = new StringBuilder(message.ToString());
+                                    str.Replace(NUMBER_PLACEHOLDER, (++id).ToString());
+                                    str.Replace(TIME_PLACEHOLDER, DateTime.Now.ToString("HH:mm:ss"));
 
-                                throw new Exception(sb.ToString(), ex);
+                                    // send message
+                                    ConnectMessage msg = (ConnectMessage)Activator.CreateInstance(msgType, new object[] { this, collectionName, XElement.Parse(str.ToString()) });
+                                    msg.SendData();
+                                    Thread.Sleep(Int32.Parse(message.Attribute("delay").Value));
+                                }
                             }
                         }
+
+                        Thread.Sleep(Int32.Parse(messages.Attribute("delay").Value));
+                        Debug.Unindent();
                     }
                 }
 
-                Thread.Sleep(Delay);
+                Debug.Unindent();
             }
-
-            str.Clear();
-            str.Append(this.GetType().ToString());
-            str.Append(" Ended at: ");
-            str.Append(DateTime.Now.ToString());
-            Debug.WriteLine(str.ToString());
-            ReportStatistics();
         }
     }
 }

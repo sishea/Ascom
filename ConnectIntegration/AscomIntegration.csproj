@@ -41,10 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ConnectInterface.cs" />
-    <Compile Include="ConnectObject.cs" />
     <Compile Include="Messages\ConnectMessage.cs" />
     <Compile Include="Interfaces\TAPInterface.cs" />
     <Compile Include="Interfaces\TCPIntegration.cs" />
+    <Compile Include="Messages\SerialMessage.cs" />
     <Compile Include="Messages\SMTPMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Messages\TAPMessage.cs" />
