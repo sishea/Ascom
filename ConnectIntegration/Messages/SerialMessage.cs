@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AscomIntegration.Messages
+namespace AscomIntegration
 {
-    class SerialMessage : ConnectMessage
+    public class SerialMessage : ConnectMessage
     {
         public SerialMessage(TCPInterface conn, string collectionName, XElement element) : base(conn, collectionName, element) { }
 
