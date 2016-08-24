@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Net.Sockets;
-using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace AscomIntegration
 {
-    public class TAPInterface : TCPIntegration
+    public class TAPInterface : TCPInterface
     {
         // sample message "<STX>Address<CR>Sample Message<CR><ETX><CHKSUM><CR>"
         private const char STX = (char)2;   // Start of Text
@@ -20,7 +17,7 @@ namespace AscomIntegration
         private string _pagerID;
         private string _endTrans;
 
-        public TAPInterface(string xml) : base(xml)
+        public TAPInterface(XElement element) : base(element)
         {
             SetupMessages();
         }
@@ -42,14 +39,14 @@ namespace AscomIntegration
             _endTrans = endTrans.ToString();
         }
 
-        public override void Send(ConnectMessage message)
+        public new void SendMessage(string message)
         {
             Connect();
             //Debug.WriteLineIf(_debugLevel == DebugLevel.High, DateTime.Now.ToString("HH:mm:ss") + " - Sending TAP message with body: " + message.Body);
             _numMessages++;
             SendData(CR.ToString());
             SendData(_pagerID);
-            SendData(message.ToString());
+            SendData(message);
             SendData(_endTrans);
             Close();
         }

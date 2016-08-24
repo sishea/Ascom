@@ -1,29 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Net.Sockets;
-using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace AscomIntegration
 {
-    public class TCPIntegration : ConnectInterface
+    public class TCPInterface : ConnectInterface
     {
         protected TcpClient _client;
         protected NetworkStream _stream;
 
-        public TCPIntegration(string xml) : base(xml) { }
+        public TCPInterface(XElement element) : base(element) { }
 
-        //public TCPIntegration(string ipAddress, int port) : base(ipAddress, port) { }
-
-        public override void Send(ConnectMessage message)
+        public void SendMessage(string message)
         {
             Connect();
             _numMessages++;
             // Translate the passed message into ASCII and store it as a Byte array.
-            Byte[] data = System.Text.Encoding.ASCII.GetBytes(message.ToString());
+            Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
             try
             {
@@ -45,14 +38,14 @@ namespace AscomIntegration
             Close();
         }
 
-        protected override void Connect()
+        protected void Connect()
         {
             _client = new TcpClient();
             _client.Connect(_address, _port);
             _stream = _client.GetStream();
         }
 
-        protected override void Close()
+        protected void Close()
         {
             _stream.Close();
             _client.Close();
